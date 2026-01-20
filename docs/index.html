@@ -7,51 +7,66 @@
   <style>
     body{font-family:system-ui;margin:0;padding:40px;background:#f7f7f7;color:#222}
     .c{max-width:900px;margin:auto;background:#fff;padding:30px;border-radius:10px}
+
     a{color:#4b4bff;text-decoration:none;font-weight:600}
     a:hover{text-decoration:underline}
+
+    .buttons{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 8px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#4b4bff;color:#fff}
+    .btn:hover{opacity:.9;text-decoration:none}
+
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+    th{background:#f3f4ff}
+
     .note{background:#f5f7ff;padding:12px;border-left:4px solid #4b4bff;margin-top:14px}
   </style>
 </head>
+
 <body>
   <div class="c">
     <h1>MediaLab – Extracción y Procesamiento de Datos</h1>
 
     <h2>Descarga de datos (CSV)</h2>
 
-  <div class="buttons">
-    <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/posts_python_blog.csv" download>⬇ posts_python_blog.csv</a>
-    <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/posts_python_blog_procesado.csv" download>⬇ posts_python_blog_procesado.csv</a>
-    <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/top_palabras_titulos.csv" download>⬇ top_palabras_titulos.csv</a>
+    <div class="buttons">
+      <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/posts_python_blog.csv" download>⬇ posts_python_blog.csv</a>
+      <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/posts_python_blog_procesado.csv" download>⬇ posts_python_blog_procesado.csv</a>
+      <a class="btn" href="https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/top_palabras_titulos.csv" download>⬇ top_palabras_titulos.csv</a>
+    </div>
+
+    <h2>Top palabras (preview)</h2>
+    <table id="tabla">
+      <thead>
+        <tr><th>Palabra</th><th>Frecuencia</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="note">
+      Si el CSV se abre como texto: clic derecho → <b>Guardar enlace como…</b>
+    </div>
   </div>
 
-<h2>Top palabras (preview)</h2>
-<table id="tabla">
-  <thead>
-    <tr><th>Palabra</th><th>Frecuencia</th></tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <script>
+  (async () => {
+    const url = "https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/top_palabras_titulos.csv";
+    const res = await fetch(url);
+    const text = await res.text();
 
-<div class="note">
-  Si el CSV se abre como texto: clic derecho → <b>Guardar enlace como…</b>
-</div>
+    const lines = text.trim().split("\n").slice(1, 11); // 10 filas
+    const tbody = document.querySelector("#tabla tbody");
 
-<script>
-(async () => {
-  const url = "https://raw.githubusercontent.com/rodrirey18/medialab-scraping/main/data/top_palabras_titulos.csv";
-  const res = await fetch(url);
-  const text = await res.text();
+    lines.forEach(line => {
+      const [palabra, count] = line.split(",");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${palabra}</td><td>${count}</td>`;
+      tbody.appendChild(tr);
+    });
+  })();
+  </script>
+</body>
+</html>
 
-  const lines = text.trim().split("\n").slice(1, 11); // 10 filas
-  const tbody = document.querySelector("#tabla tbody");
-
-  lines.forEach(line => {
-    const [palabra, count] = line.split(",");
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${palabra}</td><td>${count}</td>`;
-    tbody.appendChild(tr);
-  });
-})();
-</script>
 
 
