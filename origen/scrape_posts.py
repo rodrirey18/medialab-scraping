@@ -6,13 +6,14 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 URL = "https://blog.python.org/"
-OUT = Path("data/posts_python_blog.csv")
+SALIDA = Path("datos/posts_python_blog.csv")
 
 def limpiar_texto(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 def main():
-    OUT.parent.mkdir(parents=True, exist_ok=True)
+    # Asegura que exista la carpeta "datos/"
+    SALIDA.parent.mkdir(parents=True, exist_ok=True)
 
     resp = requests.get(URL, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
     resp.raise_for_status()
@@ -30,8 +31,9 @@ def main():
             posts.append({"titulo": titulo, "url": link})
 
     df = pd.DataFrame(posts).drop_duplicates()
-    df.to_csv(OUT, index=False, encoding="utf-8")
-    print(f"OK: {len(df)} posts guardados en {OUT}")
+    df.to_csv(SALIDA, index=False, encoding="utf-8")
+
+    print(f"OK: {len(df)} posts guardados en {SALIDA}")
 
 if __name__ == "__main__":
     main()
