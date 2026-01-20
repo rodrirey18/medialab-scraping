@@ -18,7 +18,7 @@ def tokenizar(texto: str):
 
 def main():
     if not INP.exists():
-        raise FileNotFoundError("Primero ejecuta src/origen/scrape_posts.py para crear el CSV.")
+        raise FileNotFoundError("Primero ejecuta: python src/origen/scrape_posts.py")
 
     df = pd.read_csv(INP)
 
